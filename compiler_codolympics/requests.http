@@ -1,0 +1,14 @@
+POST http://localhost:8005/api/v1/run HTTP/1.1
+content-type: application/json
+
+{
+    "language": "cpp",
+    "code": "
+        #include<isotream>
+        
+        int main() {
+            std::cout<<\"Hello World\";
+            return 0;
+        }
+    "
+}
