@@ -27,5 +27,5 @@ app.use((err, req, res, next) => {
     else if (err.name === 'JsonWebTokenError' || err.message === 'Authorization Failed')
         res.status(401).json({ message: 'Authorization Failed' });
     else
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error", err });
 });
