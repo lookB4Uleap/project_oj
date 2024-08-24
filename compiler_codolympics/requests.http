@@ -3,12 +3,6 @@ content-type: application/json
 
 {
     "language": "cpp",
-    "code": "
-        #include<isotream>
-        
-        int main() {
-            std::cout<<\"Hello World\";
-            return 0;
-        }
-    "
+    "code": "#include<iostream> #include<string> int main() {string name = "";getline (std::cin, name);std::cout<<\"Hello \"<<name;return 0;}",
+    "inputs": "Anish"
 }
