@@ -14,9 +14,10 @@ const port = process.env.PORT || 5000;
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: ['http://127.0.0.1:5173'],
+    origin: ['http://localhost:5173', 'http://localhost:8000'],
     credentials: true // Allow sending cookies and credentials
 }));
+// app.use(cors());
 const DATABASE_URL = process.env.DATABASE;
 DATABASE_URL && mongoose_1.default.connect(DATABASE_URL).then(() => console.log(`[server] Database Found`)).catch(err => console.log(err));
 const db = mongoose_1.default.connection;

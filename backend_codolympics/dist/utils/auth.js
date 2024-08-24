@@ -17,8 +17,9 @@ const authorizeUser = (userId, username, email) => {
 };
 exports.authorizeUser = authorizeUser;
 const verifyRefreshToken = (refreshToken) => {
+    const secret = process.env.API_SECRET;
     try {
-        let user = jsonwebtoken_1.default.verify(refreshToken, 'shhhhh');
+        let user = jsonwebtoken_1.default.verify(refreshToken, secret);
         return { user, error: null };
     }
     catch (error) {
