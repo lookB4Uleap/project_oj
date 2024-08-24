@@ -53,7 +53,7 @@ const LoginForm = () => {
         setLoading(true);
 
         try {
-            const { data } = await api.post("/api/users/login", formData);
+            const { data } = await api.post("/api/users/login", formData, {withCredentials: true});
             console.log("[Login] Data ", data);
             updateAuthToken(data?.tokens.authToken);
             navigate("/");

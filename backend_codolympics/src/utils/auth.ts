@@ -15,8 +15,9 @@ export const authorizeUser = (userId: string, username: string, email: string) =
 }
 
 export const verifyRefreshToken = (refreshToken: string) => {
+    const secret = process.env.API_SECRET as jwt.Secret;
     try {
-        let user = jwt.verify(refreshToken, 'shhhhh') as jwt.JwtPayload;
+        let user = jwt.verify(refreshToken, secret) as jwt.JwtPayload;
         return {user, error: null};
     } 
     catch(error: any) {

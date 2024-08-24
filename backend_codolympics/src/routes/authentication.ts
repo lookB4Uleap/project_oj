@@ -65,8 +65,11 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: false, // Use in production with HTTPS
-        sameSite: 'none', // Adjust as needed
-        maxAge: 1000 * 60 * 60 * 24 * 30
+        sameSite: 'strict', // Adjust as needed
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+        path: '/',
+        domain: undefined
+
     }).status(200).json({ 
         message: 'User logged in.', 
         tokens: {
@@ -119,7 +122,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: false, // Use in production with HTTPS
-        sameSite: 'none', // Adjust as needed
+        sameSite: 'strict', // Adjust as needed
         maxAge: 1000 * 60 * 60 * 24 * 30
     }).status(201).json({ 
         message: 'User created.', 
@@ -162,7 +165,7 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: false, // Use in production with HTTPS
-        sameSite: 'none', // Adjust as needed
+        sameSite: 'strict', // Adjust as needed
         maxAge: 1000 * 60 * 60 * 24 * 30
     }).status(201).json({ 
         message: 'User created.', 

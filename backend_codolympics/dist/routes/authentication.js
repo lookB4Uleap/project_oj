@@ -61,11 +61,15 @@ router.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, func
         return;
     }
     const tokens = (0, auth_1.authorizeUser)(user === null || user === void 0 ? void 0 : user._id.toString(), user.username, user.email);
+    res.header("Access-Control-Allow-Origin: *");
+    res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: false,
-        sameSite: 'none',
-        maxAge: 1000 * 60 * 60 * 24 * 30
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+        path: '/',
+        domain: undefined
     }).status(200).json({
         message: 'User logged in.',
         tokens: {
@@ -107,10 +111,12 @@ router.post('/register', (req, res, next) => __awaiter(void 0, void 0, void 0, f
         return;
     }
     const tokens = (0, auth_1.authorizeUser)(newUser === null || newUser === void 0 ? void 0 : newUser._id.toString(), newUser.username, newUser.email);
+    res.header("Access-Control-Allow-Origin: *");
+    res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: false,
-        sameSite: 'none',
+        sameSite: 'strict',
         maxAge: 1000 * 60 * 60 * 24 * 30
     }).status(201).json({
         message: 'User created.',
@@ -142,10 +148,12 @@ router.post('/auth', (req, res, next) => {
         return;
     }
     const tokens = (0, auth_1.authorizeUser)(user.userId, user.username, user.email);
+    res.header("Access-Control-Allow-Origin: *");
+    res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: false,
-        sameSite: 'none',
+        sameSite: 'strict',
         maxAge: 1000 * 60 * 60 * 24 * 30
     }).status(201).json({
         message: 'User created.',
