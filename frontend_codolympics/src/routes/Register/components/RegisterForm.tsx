@@ -48,7 +48,7 @@ export const RegisterForm = () => {
         setLoading(true);
 
         try {
-            const { data } = await api.post("/api/users/register", formData);
+            const { data } = await api.post("/api/v1/users/register", formData);
             console.log("[Register] Data ", data);
             updateAuthToken(data?.tokens.authToken);
             navigate("/");

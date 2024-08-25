@@ -2,8 +2,9 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import 'dotenv/config'; // remember
 import cors from 'cors';
 import mongoose from 'mongoose';
-import AuthRouter from './routes/authentication';
 import cookieParser from 'cookie-parser';
+import AuthRouter from './routes/authentication';
+import ProblemsRouter from './routes/problems';
 
 const app: Express = express();
 const port = process.env.PORT || 5000;
@@ -38,7 +39,8 @@ app.listen(port, () => {
     console.log(`[server] Server is running at http://localhost:${port}`);
 });
 
-app.use('/api/users', AuthRouter);
+app.use('/api/v1/users', AuthRouter);
+app.use('/api/v1/problems', ProblemsRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err); // Log the error for debugging

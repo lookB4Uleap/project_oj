@@ -1,16 +1,36 @@
+import { useState } from "react";
 import Navbar from "../../components/Navbar";
-import { EditorContainer } from "../Problems/components/Editor";
+import { Console } from "./components/Console";
+import { Editor } from "./components/Editor";
+import {
+    CodeContext,
+    CompilerType,
+    languages,
+} from "../../contexts/CodeContext";
 
 export const Playground = () => {
+    const [compiler, setCompiler] = useState<CompilerType>({
+        code: "",
+        language: languages[0].id,
+        input: "",
+        output: "",
+    });
+
     return (
-        <div className="flex flex-1 flex-col h-full">
-            <Navbar />
-            <div className="flex flex-1 flex-col lg:flex-row">
-                {/* <div className="flex flex-1 h-full resize-x"></div> */}
-                <div className="flex flex-1 h-full">
-                    <EditorContainer language="cpp" defaultValue="// c++ editor" />
+        <CodeContext.Provider value={{
+            compiler,
+            handleCompilerChange: (compiler: CompilerType) => setCompiler((prev: CompilerType) => ({
+                ...prev,
+                ...compiler
+            }))
+        }}>
+            <div className="flex flex-1 flex-col h-full">
+                <Navbar />
+                <div className="flex flex-1 flex-col lg:flex-row">
+                    <Editor />
+                    <Console />
                 </div>
             </div>
-        </div>
+        </CodeContext.Provider>
     );
 };

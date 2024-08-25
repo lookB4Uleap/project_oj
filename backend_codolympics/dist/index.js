@@ -7,8 +7,9 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config"); // remember
 const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const authentication_1 = __importDefault(require("./routes/authentication"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const authentication_1 = __importDefault(require("./routes/authentication"));
+const problems_1 = __importDefault(require("./routes/problems"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
 app.use(express_1.default.json());
@@ -30,7 +31,8 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`[server] Server is running at http://localhost:${port}`);
 });
-app.use('/api/users', authentication_1.default);
+app.use('/api/v1/users', authentication_1.default);
+app.use('/api/v1/problems', problems_1.default);
 app.use((err, req, res, next) => {
     console.error(err); // Log the error for debugging
     if (Math.floor(res.statusCode / 100) === 4)

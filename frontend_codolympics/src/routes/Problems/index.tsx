@@ -8,7 +8,7 @@ export const Problems = () => {
             <div className="flex flex-1 flex-col lg:flex-row">
                 <div className="flex flex-1 h-full resize-x"></div>
                 <div className="flex flex-1 h-full">
-                    <EditorContainer language="cpp" defaultValue="// c++ editor" />
+                    <EditorContainer language="cpp" defaultValue="// c++ editor" submit />
                 </div>
             </div>
         </div>
