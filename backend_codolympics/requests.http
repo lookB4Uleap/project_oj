@@ -1,4 +1,4 @@
-POST http://localhost:8000/api/users/register HTTP/1.1
+POST http://localhost:8000/api/v1/users/register HTTP/1.1
 content-type: application/json
 
 {
@@ -7,10 +7,23 @@ content-type: application/json
     "password": "1234567890"
 }
 ###
-POST http://localhost:8000/api/users/login HTTP/1.1
+POST http://localhost:8000/api/v1/users/login HTTP/1.1
 content-type: application/json
 
 {
     "username": "lookb4uleap",
     "password": "1234567890"
 }
+### 
+POST http://localhost:8000/api/v1/problems HTTP/1.1
+content-type: application/json
+
+{
+    "problemTitle": "Sum of N numbers",
+    "problemDescription": "Given a sequence of N numbers output the sum of all the numbers in the sequence.",
+    "inputDescription": "First line is a number N (1<=N<=10^5) denoting the sequence lenght. Next line contains N space separated numbers a[i] (-10^4 <= a[i] <= 10^4) belonging to this sequence",
+    "outputDescription": "Display a single number which will be the sum of the sequence",
+    "points": 5
+}
+###
+GET http://localhost:8000/api/v1/problems HTTP/1.1
