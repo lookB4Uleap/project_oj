@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true}));
 
 app.get('/', (req: Request, res: Response) => {
     // console.log(`Request processed at ${process.pid}`);
-    res.send('Express + TypeScript Server');
+    res.send('Codolympics Compiler');
 });
 
 app.listen(port, () => {

@@ -10,21 +10,21 @@ enum Languages {
     py = 'py'
 }
 
-const executeCode = (language: string, filePath: string, inputs?: string) => {
+const executeCode = (language: string, filePath: string, input?: string) => {
     if (language === Languages.c)
-        return executeC(filePath, inputs);
+        return executeC(filePath, input);
     else if (language === Languages.cpp)
-        return executeCpp(filePath, inputs);
+        return executeCpp(filePath, input);
     else if (language === Languages.py)
-        return executePython(filePath, inputs);
+        return executePython(filePath, input);
     return;
 }
 
-const execute = async (language: string, code: string, inputs?: string) => {
+const execute = async (language: string, code: string, input?: string) => {
     try {
         const filePath = generateFile(language, code);
-        // const result = await executeCpp(filePath, inputs);
-        const result = await executeCode(language, filePath, inputs);
+        // const result = await executeCpp(filePath, input);
+        const result = await executeCode(language, filePath, input);
         console.log('[Run] Output', result);
         return { success: true, result, error: null };
     }
@@ -36,12 +36,12 @@ const execute = async (language: string, code: string, inputs?: string) => {
 router.post('/run', async (req: Request, res: Response, next: NextFunction) => {
     const language = req.body.language;
     const code = req.body.code;
-    const inputs = req.body.inputs;
+    const input = req.body.input;
 
     if (!language || !code)
         return res.status(400).json({ message: "Language or code is missing!" });
 
-    const { success, result, error } = await execute(language, code, inputs);
+    const { success, result, error } = await execute(language, code, input);
 
     if (error)
         return next(error);
