@@ -4,5 +4,5 @@ content-type: application/json
 {
     "language": "cpp",
     "code": "#include<iostream> #include<string> int main() {string name = "";getline (std::cin, name);std::cout<<\"Hello \"<<name;return 0;}",
-    "inputs": "Anish"
+    "input": "Anish"
 }
