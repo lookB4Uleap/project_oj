@@ -11,6 +11,6 @@ RUN yarn build
 FROM node:20-alpine AS final
 WORKDIR /app
 COPY package*.json yarn.lock ./ 
-RUN yarn install --production
+RUN yarn install --production && apk update && apk add --no-cache g++ gcc python3
 COPY --from=builder ./app/dist ./dist
 CMD [ "yarn", "start" ]

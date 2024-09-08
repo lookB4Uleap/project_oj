@@ -27,3 +27,16 @@ content-type: application/json
 }
 ###
 GET http://localhost:8000/api/v1/problems HTTP/1.1
+###
+GET http://localhost:8000/api/v1/problems/66ca439ffa39af2a028eb050 HTTP/1.1
+###
+POST http://localhost:8000/api/v1/testcases HTTP/1.1
+Content-Type: application/json
+
+{
+    "problemId": "66ca439ffa39af2a028eb050",
+    "type": "sample",
+    "input": "https://codolympics-testcase-outputs.s3.ap-south-1.amazonaws.com/cc19a115-5a45-4168-8562-aa8256497b83.txt",
+    "output": "https://codolympics-testcase-outputs.s3.ap-south-1.amazonaws.com/6cf80232-20a9-4b7d-9845-202ad5b9843a.txt",
+    "points": 5
+}

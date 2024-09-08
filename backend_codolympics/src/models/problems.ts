@@ -13,6 +13,8 @@ export type ProblemType = {
     outputDescription: string;
     sampleTestCases?: TestCaseInputOutputType[];
     points: number;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 const problemSchema = new Schema<ProblemType>({

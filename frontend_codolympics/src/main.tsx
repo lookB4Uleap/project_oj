@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         element: <Register />,
     },
     {
-        path: "/problems",
+        path: "/problems/:problemId",
         element: <Problems />
     },
     {
