@@ -30,21 +30,12 @@ const router = createBrowserRouter([
     },
     {
         path: "/playground",
-<<<<<<< HEAD
         element: <Playground />,
     },
     {
         path: "/createQuestion",
         element: <CreateQuestion />,
     },
-=======
-        element: <Playground />
-    },
-    {
-        path: "/createQuestion",
-        element: <CreateQuestion />
-    }
->>>>>>> dfa55c0 (Added created question page and authorize user)
 ]);
 
 const darkTheme = createTheme({
