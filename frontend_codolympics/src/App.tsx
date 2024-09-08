@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import { api } from "./api";
 
@@ -34,12 +34,14 @@ export const App = ({ children }: { children: React.ReactNode }) => {
         }
         catch(err: any) {
             console.error(err);
+            setAuthToken(null);
         }   
-    }, [])
+    }, [authToken]);
 
     // TODO: Add listener to refresh authToken
     useEffect(() => {
         loadUser();
+        return () => setAuthToken(null);
     }, []);
 
     return (

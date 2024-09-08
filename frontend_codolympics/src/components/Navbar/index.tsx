@@ -11,6 +11,7 @@ import { MenuOptions } from "./Menu";
 import { LoginButton } from "./LoginButton";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { api } from "../../api";
 
 type PathIndexType = {
     [key: string]: number;
@@ -32,12 +33,34 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
     const [navigation, setNavigation] = useState(navigationProps);
-    const { authToken } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const { authToken, updateAuthToken } = useContext(AuthContext);
+    const [auth, setAuth] = useState<string|null>(null);
 
     const handleChange = (index: number) => {
         navigation[index].current = true;
         setNavigation([...navigation]);
     };
+
+    // const handleLoading = (loading: boolean) => {
+    //     console.log('[Navbar] Loading: ', loading);
+    //     setLoading(loading);
+    // }
+    
+    const handleLogout = async() => {
+        setLoading(true);
+        console.log('[Navbar] Loading: ', loading);
+        await api.post('/api/v1/users/logout', {}, {
+            withCredentials: true
+        });
+        setAuth(null);
+        updateAuthToken(null);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        setAuth(authToken);
+    }, [authToken])
 
     useEffect(() => {
         const pathName = window.location.pathname;
@@ -46,8 +69,15 @@ export default function Navbar() {
             index = pathIndex[pathName];
         if (index !== -1)
             handleChange(index);
-        () => setNavigation(navigationProps);
+        return () => {
+            setNavigation(navigationProps);
+            setLoading(false);
+        };
     }, []);
+
+    // useEffect(() => {
+    //     console.log('[Navbar] AuthToken ', authToken);
+    // }, [authToken]);
 
     return (
         <Disclosure as="nav" className="bg-gray-800 w-full">
@@ -112,7 +142,7 @@ export default function Navbar() {
 
                         {/* Profile dropdown */}
                         {/* <ArrowLeftEndOnRectangleIcon className="h-6 w-6" /> */}
-                        {authToken ? <MenuOptions /> : <LoginButton />}
+                        {auth ? <MenuOptions onLogout={handleLogout} /> : <LoginButton />}
                     </div>
                 </div>
             </div>

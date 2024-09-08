@@ -7,5 +7,5 @@ export const api = axios.create({
 
 export const compilerAPI = axios.create({
     baseURL: import.meta.env.VITE_COMPILER,
-    timeout: 10000
+    timeout: 30000
 })

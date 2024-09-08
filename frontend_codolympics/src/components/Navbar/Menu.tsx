@@ -1,11 +1,16 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-const menuItems = [
-    { name: "Profile", action: null },
-    { name: "Logout", action: null },
-];
+type propsType = {
+    onLogout: () => void
+}
 
-export const MenuOptions = () => {
+export const MenuOptions = (props: propsType) => {
+
+    const menuItems = [
+        { name: "Profile", action: null },
+        { name: "Logout", action: props.onLogout },
+    ];
+
     return (
         <Menu as="div" className="relative ml-3">
             <div>
@@ -27,8 +32,8 @@ export const MenuOptions = () => {
                 {menuItems.map((menuItem) => (
                     <MenuItem key={menuItem.name} >
                         <a
-                            href="#"
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                            onClick={() => menuItem.action && menuItem.action()}
                         >
                             {menuItem.name}
                         </a>

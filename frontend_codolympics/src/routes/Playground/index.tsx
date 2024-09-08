@@ -17,6 +17,7 @@ export const Playground = () => {
     });
 
     return (
+        // TODO: Set language base on query string
         <CodeContext.Provider value={{
             compiler,
             handleCompilerChange: (compiler: CompilerType) => setCompiler((prev: CompilerType) => ({

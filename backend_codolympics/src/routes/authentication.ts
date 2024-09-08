@@ -180,4 +180,8 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
     });
 });
 
+router.post('/logout', async (req: Request, res: Response) => {
+    res.clearCookie('refreshToken').status(200).json({message: 'Successfully logged out!'});
+});
+
 export default router;

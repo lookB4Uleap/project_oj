@@ -1,10 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 export type ProblemType = {
     _id: number,
-    name: string,
+    problemTitle: string,
     points: number
 }
 
 export const Problem = ({ problem, index }: { problem: ProblemType, index: number}) => {
+    const navigate = useNavigate();
+
     return (
         <div className={`
                 flex flex-row flex-wrap 
@@ -15,13 +19,14 @@ export const Problem = ({ problem, index }: { problem: ProblemType, index: numbe
                 hover:cursor-pointer
                 ${index % 2 === 0 ? "bg-opacity-20 bg-slate-900" : "bg-opacity-25 bg-slate-800"}
             `}
+            onClick={() => navigate(`/problems/${problem._id}`)}
         >
             <div className="
                     flex flex-row
                     text-xl
                 "
             >
-                {problem.name}
+                {problem.problemTitle}
             </div>
             <div
                 className="

@@ -9,6 +9,7 @@ type EditorProps = {
     defaultValue?: string;
     run?: boolean;
     submit?: boolean;
+    onSubmit?: () => void;
 };
 
 const options = {
@@ -87,7 +88,7 @@ export const EditorContainer = (props: EditorProps) => {
                 code: compiler.code,
                 input: compiler.input,
             });
-            console.log('[Code] Output', data);
+            console.log("[Code] Output", data);
             compiler.output = data.result;
             handleCompilerChange(compiler);
         } catch (error: any) {
@@ -108,7 +109,14 @@ export const EditorContainer = (props: EditorProps) => {
                     </button>
 
                     {props.submit && (
-                        <button className="flex items-center justify-center text-sm h-6 m-1 rounded-md">
+                        <button
+                            className="flex items-center justify-center text-sm h-6 m-1 rounded-md"
+                            onClick={() =>
+                                props?.submit &&
+                                props?.onSubmit &&
+                                props.onSubmit()
+                            }
+                        >
                             Submit
                         </button>
                     )}

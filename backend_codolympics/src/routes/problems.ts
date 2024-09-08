@@ -11,12 +11,12 @@ const saveProblem = async (problemProps: ProblemType) => {
             inputDescription: problemProps.inputDescription,
             outputDescription: problemProps.outputDescription,
             points: problemProps.points
-        });    
+        });
         const newProblem = await problem.save();
-        return {problem: newProblem, error: null};
-    } 
+        return { problem: newProblem, error: null };
+    }
     catch (error: any) {
-        return {problem: null, error};
+        return { problem: null, error };
     }
 }
 
@@ -29,9 +29,9 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const points = req.body.points;
 
     if (!problemTitle || !problemDescription || !inputDescription || !outputDescription || !points)
-        return res.status(400).json({message: "Problem fields missing!"});
+        return res.status(400).json({ message: "Problem fields missing!" });
 
-    const {problem, error} = await saveProblem({
+    const { problem, error } = await saveProblem({
         problemTitle,
         problemDescription,
         inputDescription,
@@ -42,25 +42,45 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     if (error)
         return next(error);
 
-    res.status(201).json({message: 'Problem created successfully', problem});
+    res.status(201).json({ message: 'Problem created successfully', problem });
 });
 
 const getProblems = async () => {
     try {
         const problems = await Problem.find().limit(10).lean();
-        return {problems, error: null};
+        return { problems, error: null };
     } catch (error: any) {
-        return {problems: null, error};
+        return { problems: null, error };
     }
 }
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    const {problems, error} = await getProblems();
+    const { problems, error } = await getProblems();
 
     if (error)
         return next(error);
 
-    res.status(200).json({problems});
+    res.status(200).json({ problems });
+});
+
+const getProblem = async (id: string) => {
+    try {
+        const problem = await Problem.findById(id).lean();
+        return { problem, error: null };
+    } catch (error: any) {
+        return { problem: null, error };
+    }
+}
+
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    // const {problems, error} = await getProblems();
+    const { problem, error } = await getProblem(id);
+
+    if (error)
+        return next(error);
+
+    res.status(200).json({ problem });
 });
 
 export default router;
