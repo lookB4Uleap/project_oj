@@ -26,7 +26,7 @@ export const RegisterForm = () => {
         message: "",
         error: null,
     });
-    const { updateAuthToken } = useContext(AuthContext);
+    const { updateAuth } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,7 +50,7 @@ export const RegisterForm = () => {
         try {
             const { data } = await api.post("/api/v1/users/register", formData);
             console.log("[Register] Data ", data);
-            updateAuthToken(data?.tokens.authToken);
+            updateAuth(data);
             navigate("/");
         } catch (err: any) {
             setLoading(false);

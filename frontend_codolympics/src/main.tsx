@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { App } from "./App";
 import { Problems } from "./routes/Problems";
 import { Playground } from "./routes/Playground";
+import { CreateQuestion } from "./routes/CreateQuestion";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
     {
         path: "/playground",
         element: <Playground />
+    },
+    {
+        path: "/createQuestion",
+        element: <CreateQuestion />
     }
 ]);
 

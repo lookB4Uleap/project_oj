@@ -28,7 +28,7 @@ const LoginForm = () => {
         message: "",
         error: null
     });
-    const { updateAuthToken } = useContext(AuthContext);
+    const { updateAuth } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const LoginForm = () => {
         try {
             const { data } = await api.post("/api/v1/users/login", formData, {withCredentials: true});
             console.log("[Login] Data ", data);
-            updateAuthToken(data?.tokens.authToken);
+            updateAuth(data);
             navigate("/");
         } catch (err: any) {
             setLoading(false);

@@ -3,10 +3,7 @@ import {
     DisclosureButton,
     DisclosurePanel,
 } from "@headlessui/react";
-import {
-    Bars3Icon,
-    XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { MenuOptions } from "./Menu";
 import { LoginButton } from "./LoginButton";
 import { useContext, useEffect, useState } from "react";
@@ -20,6 +17,7 @@ type PathIndexType = {
 const navigationProps = [
     { name: "Home", href: "/", current: false },
     { name: "Playground", href: "/playground", current: false },
+    { name: "Create Question", href: "/createQuestion", current: false },
 ];
 
 const pathIndex: PathIndexType = {
@@ -34,8 +32,8 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
     const [navigation, setNavigation] = useState(navigationProps);
     const [loading, setLoading] = useState(false);
-    const { authToken, updateAuthToken } = useContext(AuthContext);
-    const [auth, setAuth] = useState<string|null>(null);
+    const { authToken, user, updateAuth } = useContext(AuthContext);
+    const [auth, setAuth] = useState<string | null | undefined>(null);
 
     const handleChange = (index: number) => {
         navigation[index].current = true;
@@ -46,29 +44,31 @@ export default function Navbar() {
     //     console.log('[Navbar] Loading: ', loading);
     //     setLoading(loading);
     // }
-    
-    const handleLogout = async() => {
+
+    const handleLogout = async () => {
         setLoading(true);
-        console.log('[Navbar] Loading: ', loading);
-        await api.post('/api/v1/users/logout', {}, {
-            withCredentials: true
-        });
+        console.log("[Navbar] Loading: ", loading);
+        await api.post(
+            "/api/v1/users/logout",
+            {},
+            {
+                withCredentials: true,
+            }
+        );
         setAuth(null);
-        updateAuthToken(null);
+        updateAuth(null);
         setLoading(false);
-    }
+    };
 
     useEffect(() => {
         setAuth(authToken);
-    }, [authToken])
+    }, [authToken]);
 
     useEffect(() => {
         const pathName = window.location.pathname;
         let index = -1;
-        if (pathName in pathIndex)
-            index = pathIndex[pathName];
-        if (index !== -1)
-            handleChange(index);
+        if (pathName in pathIndex) index = pathIndex[pathName];
+        if (index !== -1) handleChange(index);
         return () => {
             setNavigation(navigationProps);
             setLoading(false);
@@ -109,6 +109,7 @@ export default function Navbar() {
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
                                 {navigation.map((item, index) => (
+                                    (item.name !== "Create Question" || (user?.roles?.admin && item.name === "Create Question")) &&
                                     <a
                                         key={item.name}
                                         href={item.href}
@@ -125,6 +126,7 @@ export default function Navbar() {
                                     >
                                         {item.name}
                                     </a>
+
                                 ))}
                             </div>
                         </div>
@@ -142,7 +144,11 @@ export default function Navbar() {
 
                         {/* Profile dropdown */}
                         {/* <ArrowLeftEndOnRectangleIcon className="h-6 w-6" /> */}
-                        {auth ? <MenuOptions onLogout={handleLogout} /> : <LoginButton />}
+                        {auth ? (
+                            <MenuOptions onLogout={handleLogout} />
+                        ) : (
+                            <LoginButton />
+                        )}
                     </div>
                 </div>
             </div>
