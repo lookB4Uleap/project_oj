@@ -32,13 +32,8 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
     const [navigation, setNavigation] = useState(navigationProps);
     const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
     const { authToken, user, updateAuth } = useContext(AuthContext);
     const [auth, setAuth] = useState<string | null | undefined>(null);
-=======
-    const { authToken, updateAuthToken } = useContext(AuthContext);
-    const [auth, setAuth] = useState<string|null>(null);
->>>>>>> b59c8f0 (Added online judge feature)
 
     const handleChange = (index: number) => {
         navigation[index].current = true;
@@ -49,7 +44,6 @@ export default function Navbar() {
     //     console.log('[Navbar] Loading: ', loading);
     //     setLoading(loading);
     // }
-<<<<<<< HEAD
 
     const handleLogout = async () => {
         setLoading(true);
@@ -69,36 +63,12 @@ export default function Navbar() {
     useEffect(() => {
         setAuth(authToken);
     }, [authToken]);
-=======
-    
-    const handleLogout = async() => {
-        setLoading(true);
-        console.log('[Navbar] Loading: ', loading);
-        await api.post('/api/v1/users/logout', {}, {
-            withCredentials: true
-        });
-        setAuth(null);
-        updateAuthToken(null);
-        setLoading(false);
-    }
-
-    useEffect(() => {
-        setAuth(authToken);
-    }, [authToken])
->>>>>>> b59c8f0 (Added online judge feature)
 
     useEffect(() => {
         const pathName = window.location.pathname;
         let index = -1;
-<<<<<<< HEAD
         if (pathName in pathIndex) index = pathIndex[pathName];
         if (index !== -1) handleChange(index);
-=======
-        if (pathName in pathIndex)
-            index = pathIndex[pathName];
-        if (index !== -1)
-            handleChange(index);
->>>>>>> b59c8f0 (Added online judge feature)
         return () => {
             setNavigation(navigationProps);
             setLoading(false);
