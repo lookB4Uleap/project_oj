@@ -70,26 +70,37 @@ export const Problems = () => {
     // }, [problem]);
 
     return (
-        <div className="flex flex-1 flex-col h-full">
-            <Navbar />
-            <div className="flex flex-1 flex-col lg:flex-row">
-                <div className="flex flex-1 flex-col h-full resize-x">
-                    <Problem problem={problem} />
-                    <Tests />
-                </div>
-                <div className="flex flex-1 h-full">
-                    <EditorContainer
-                        // language="cpp"
-                        // defaultValue="// c++ editor"
-                        language={languageMap[compiler.language].editor}
-                        defaultValue={
-                            languageMap[compiler.language].snippet
-                        }
-                        submit
-                        onSubmit={handleSubmit}
-                    />
+        <CodeContext.Provider
+            value={{
+                compiler,
+                handleCompilerChange: (compiler: CompilerType) =>
+                    setCompiler((prev: CompilerType) => ({
+                        ...prev,
+                        ...compiler,
+                    })),
+            }}
+        >
+            <div className="flex flex-1 flex-col h-full">
+                <Navbar />
+                <div className="flex flex-1 flex-col lg:flex-row">
+                    <div className="flex flex-1 flex-col h-full resize-x">
+                        <Problem problem={problem} />
+                        <Tests />
+                    </div>
+                    <div className="flex flex-1 h-full">
+                        <EditorContainer
+                            // language="cpp"
+                            // defaultValue="// c++ editor"
+                            language={languageMap[compiler.language].editor}
+                            defaultValue={
+                                languageMap[compiler.language].snippet
+                            }
+                            submit
+                            onSubmit={handleSubmit}
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
+        </CodeContext.Provider>
     );
 };
