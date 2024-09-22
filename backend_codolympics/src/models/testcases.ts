@@ -4,7 +4,7 @@ export type TestcaseType = {
     _id?: string;
     problemId: string;
     type: "sample" | "hidden" | "visible";
-    points: number;
+    points?: number;
     input: string;
     output: string;
     createdAt?: Date;

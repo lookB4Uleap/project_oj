@@ -1,17 +1,9 @@
+import { NextFunction, Request, Response } from "express";
+import { AuthPayload } from "./authorize";
 import jwt from "jsonwebtoken";
 import 'dotenv/config';
-import { NextFunction, Request, Response } from "express";
 
-type AuthPayload = {
-    userId: string;
-    username: string;
-    email: string;
-    roles?: {
-        [key: string]: boolean
-    };
-}
-
-export const authorize = (req: Request, res: Response, next: NextFunction) => {
+export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
     const apiSecret = process.env.API_SECRET;
 
     if (!apiSecret) {
@@ -23,7 +15,7 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
         !req.headers.authorization ||
         !req.headers.authorization.split(" ")[1]
     ) {
-        console.log('[OrderMS] Authorization Failed! Envs missing. ', { authorization: req.headers.authorization })
+        console.log('[OrderMS] Authorization Failed!', { authorization: req.headers.authorization })
         // res.status(403).json({ error: "Authorization Failed!" });
         const authorizationFailedError = new Error('Authorization Failed');
         res.status(401);
@@ -32,9 +24,16 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
 
     // TODO: Added check for timedout authtokens
     const authToken = req.headers.authorization.split(" ")[1];
-    console.log({apiSecret, authToken});
+    // console.log({ apiSecret, authToken });
 
-    const { userId } = jwt.verify(authToken, apiSecret) as AuthPayload;
-    req.body.userId = userId; 
+    const { roles } = jwt.verify(authToken, apiSecret) as AuthPayload;
+
+    if (!roles || !roles['admin']) {
+        console.log('[OrderMS] Authorization Failed! Envs missing. ', {  })
+        const authorizationFailedError = new Error('Authorization Failed');
+        res.status(401);
+        return next(authorizationFailedError);
+    }
+
     next();
 }
