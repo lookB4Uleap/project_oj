@@ -26,16 +26,16 @@ const router = createBrowserRouter([
     },
     {
         path: "/problems/:problemId",
-        element: <Problems />,
+        element: <Problems />
     },
     {
         path: "/playground",
-        element: <Playground />,
+        element: <Playground />
     },
     {
         path: "/createQuestion",
-        element: <CreateQuestion />,
-    },
+        element: <CreateQuestion />
+    }
 ]);
 
 const darkTheme = createTheme({
@@ -45,11 +45,11 @@ const darkTheme = createTheme({
 });
 
 createRoot(document.getElementById("root")!).render(
-    <App>
-        <StrictMode>
-            <ThemeProvider theme={darkTheme}>
+    <StrictMode>
+        <ThemeProvider theme={darkTheme}>
+            <App>
                 <RouterProvider router={router} />
-            </ThemeProvider>
-        </StrictMode>
-    </App>
+            </App>
+        </ThemeProvider>
+    </StrictMode>
 );

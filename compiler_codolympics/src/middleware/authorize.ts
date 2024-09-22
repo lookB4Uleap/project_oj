@@ -6,9 +6,6 @@ type AuthPayload = {
     userId: string;
     username: string;
     email: string;
-    roles?: {
-        [key: string]: boolean
-    };
 }
 
 export const authorize = (req: Request, res: Response, next: NextFunction) => {

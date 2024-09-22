@@ -1,5 +1,4 @@
-import mongoose, { model, Schema } from "mongoose";
-
+import { model, Schema } from "mongoose";
 
 export type UserType = {
     _id?: string;
@@ -9,9 +8,7 @@ export type UserType = {
     problemsSolved: number;
     badges: string[];
     points: number;
-    roles?: {
-        [key: string]: boolean
-    };
+    role?: string;
     createdAt?: Date;
     updatedAt?: Date; 
 }
@@ -28,10 +25,7 @@ const userSchema = new Schema<UserType>({
     problemsSolved: Number,
     badges: [String],
     points: Number,
-    roles: {
-        type: Map,
-        of: mongoose.Schema.Types.Mixed
-    }
+    role: String
 }, {
     timestamps: true,
     collection: 'users'

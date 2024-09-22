@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
 import Problem, { ProblemType } from "../models/problems";
-import { authorize } from "../middlewares/authorize";
-import { verifyAdmin } from "../middlewares/verify-admin";
 
 const router = Router();
 
@@ -22,7 +20,7 @@ const saveProblem = async (problemProps: ProblemType) => {
     }
 }
 
-router.post('/', authorize, verifyAdmin, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     // Add Authorization
     const problemTitle = req.body.problemTitle;
     const problemDescription = req.body.problemDescription;
@@ -44,7 +42,7 @@ router.post('/', authorize, verifyAdmin, async (req: Request, res: Response, nex
     if (error)
         return next(error);
 
-    res.status(201).json({ message: 'Problem created successfully.', problem });
+    res.status(201).json({ message: 'Problem created successfully', problem });
 });
 
 const getProblems = async () => {

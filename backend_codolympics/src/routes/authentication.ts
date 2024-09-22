@@ -39,8 +39,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
         return;
     }
 
-    // console.log('[user] User ', user?._id.toString());
-    console.log('[user] User ', user);
+    console.log('[user] User ', user?._id.toString());
 
     if (!user?._id || !user?.password) {
         res.status(400).json({ message: "No such user." });
@@ -60,7 +59,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
         return;
     }
 
-    const tokens = authorizeUser(user?._id.toString(), user.username, user.email, user?.roles);
+    const tokens = authorizeUser(user?._id.toString(), user.username, user.email);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -79,8 +78,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
         user: {
             userId: user._id,
             username: user.username,
-            email: user.email,
-            roles: user?.roles
+            email: user.email
         }
     });
 });
@@ -118,7 +116,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
         return;
     }
 
-    const tokens = authorizeUser(newUser?._id.toString(), newUser.username, newUser.email, newUser?.roles);
+    const tokens = authorizeUser(newUser?._id.toString(), newUser.username, newUser.email);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -134,8 +132,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
         user: {
             userId: newUser._id,
             username: newUser.username,
-            email: newUser.email,
-            roles: newUser?.roles
+            email: newUser.email
         }
     });
 });
@@ -162,7 +159,7 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
         return;
     }
 
-    const tokens = authorizeUser(user.userId, user.username, user.email, user?.roles);
+    const tokens = authorizeUser(user.userId, user.username, user.email);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -170,16 +167,15 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
         secure: false, // Use in production with HTTPS
         sameSite: 'strict', // Adjust as needed
         maxAge: 1000 * 60 * 60 * 24 * 30
-    }).status(200).json({ 
-        message: 'User authenticated.', 
+    }).status(201).json({ 
+        message: 'User created.', 
         tokens: {
             authToken: tokens.authToken
         },
         user: {
             userId: user.userId,
             username: user.username,
-            email: user.email,
-            roles: user?.roles
+            email: user.email
         }
     });
 });
