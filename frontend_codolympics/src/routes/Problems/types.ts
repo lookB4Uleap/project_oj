@@ -12,3 +12,13 @@ export type ProblemType = {
     sampleTestCases?: TestCaseInputOutputType[];
     points: number;
 }
+
+export type SubmissionType = {
+    userId: string;
+    problemId: string;
+    tests: number;
+    passed: number;
+    points: number;
+    verdict: string;
+    open?: boolean;
+}

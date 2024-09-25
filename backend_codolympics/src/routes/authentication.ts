@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { CookieOptions, NextFunction, Request, Response, Router } from "express";
 import bcrypt from 'bcryptjs';
 import User, { UserType } from "../models/user";
 import { authorizeUser, verifyRefreshToken } from "../utils/auth";
@@ -7,6 +7,18 @@ import { Document } from "mongoose";
 const router = Router();
 
 const SALT = 10;
+
+enum Environment {
+    production= "production",
+    development = "development"
+}
+
+const cookieOptions: CookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === Environment.development ? false : true, // Use in production with HTTPS
+    sameSite: process.env.NODE_ENV === Environment.development ? 'strict' : 'none', // Adjust as needed
+    maxAge: 1000 * 60 * 60 * 24 * 30
+};
 
 const getUser = async (username: string) => {
     try {
@@ -63,15 +75,17 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     const tokens = authorizeUser(user?._id.toString(), user.username, user.email, user?.roles);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
-    res.cookie('refreshToken', tokens.refreshToken, {
-        httpOnly: true,
-        secure: false, // Use in production with HTTPS
-        sameSite: 'strict', // Adjust as needed
-        maxAge: 1000 * 60 * 60 * 24 * 30,
-        path: '/',
-        domain: undefined
-
-    }).status(200).json({ 
+    res.cookie('refreshToken', tokens.refreshToken, 
+    // {
+    //     httpOnly: true,
+    //     secure: false, // Use in production with HTTPS
+    //     sameSite: 'strict', // Adjust as needed
+    //     maxAge: 1000 * 60 * 60 * 24 * 30,
+    //     path: '/',
+    //     domain: undefined
+    // }
+        cookieOptions
+    ).status(200).json({ 
         message: 'User logged in.', 
         tokens: {
             authToken: tokens.authToken
@@ -121,12 +135,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
     const tokens = authorizeUser(newUser?._id.toString(), newUser.username, newUser.email, newUser?.roles);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
-    res.cookie('refreshToken', tokens.refreshToken, {
-        httpOnly: true,
-        secure: false, // Use in production with HTTPS
-        sameSite: 'strict', // Adjust as needed
-        maxAge: 1000 * 60 * 60 * 24 * 30
-    }).status(201).json({ 
+    res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(201).json({ 
         message: 'User created.', 
         tokens: {
             authToken: tokens.authToken
@@ -165,12 +174,7 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
     const tokens = authorizeUser(user.userId, user.username, user.email, user?.roles);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
-    res.cookie('refreshToken', tokens.refreshToken, {
-        httpOnly: true,
-        secure: false, // Use in production with HTTPS
-        sameSite: 'strict', // Adjust as needed
-        maxAge: 1000 * 60 * 60 * 24 * 30
-    }).status(200).json({ 
+    res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(200).json({ 
         message: 'User authenticated.', 
         tokens: {
             authToken: tokens.authToken

@@ -10,6 +10,7 @@ import { App } from "./App";
 import { Problems } from "./routes/Problems";
 import { Playground } from "./routes/Playground";
 import { CreateQuestion } from "./routes/CreateQuestion";
+import { Submissions } from "./routes/Submissions";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
     {
         path: "/createQuestion",
         element: <CreateQuestion />,
+    },
+    {
+        path: "/submissions",
+        element: <Submissions />,
     },
 ]);
 

@@ -9,11 +9,12 @@ import {
     languageMap,
     languages,
 } from "../../contexts/CodeContext";
-import { ProblemType } from "./types";
+import { ProblemType, SubmissionType } from "./types";
 import { Problem } from "./components/Problem";
 import { Tests } from "./components/Tests";
 import { compilerAPI } from "../../api";
 import { AuthContext } from "../../contexts/AuthContext";
+import { SubmissionModal } from "./components/SubmissionModal";
 
 const getProblem = async (id: string) => {
     // try {
@@ -38,6 +39,7 @@ export const Problems = () => {
         input: "",
         output: "",
     });
+    const [submission, setSubmission] = useState<SubmissionType | null>(null);
 
     useEffect(() => {
         // console.log('[Problems] Problem Id ', problemId);
@@ -47,6 +49,15 @@ export const Problems = () => {
             setProblem(() => ({ ...problem }));
         })();
     }, []);
+
+    const handleModalClose = () =>
+        setSubmission(
+            (prev: SubmissionType | null) =>
+                prev && {
+                    ...prev,
+                    open: false,
+                }
+        );
 
     const handleSubmit = async () => {
         const response = await compilerAPI.post(
@@ -61,8 +72,24 @@ export const Problems = () => {
                 },
             }
         );
-        console.log("[Problem] Submmit", response.data);
-        alert(JSON.stringify({message: response.data.message, tests: response.data.submission.tests, passed: response.data.submission.passed }));
+
+        // console.log("[Problem] Submmit", response.data);
+        // alert(
+        //     JSON.stringify({
+        //         message: response.data.message,
+        //         tests: response.data.submission.tests,
+        //         passed: response.data.submission.passed,
+        //     })
+        // );
+        setSubmission(() => ({
+            userId: response.data.submission.userId,
+            tests: response.data.submission.tests,
+            passed: response.data.submission.passed,
+            problemId: response.data.submission.problemId,
+            points: response.data.submission.points,
+            verdict: response.data.submission.verdict,
+            open: true,
+        }));
     };
 
     // useEffect(() => {
@@ -81,6 +108,7 @@ export const Problems = () => {
             }}
         >
             <div className="flex flex-1 flex-col h-full">
+                <SubmissionModal submission={submission} onClose={handleModalClose}  />
                 <Navbar />
                 <div className="flex flex-1 flex-col lg:flex-row">
                     <div className="flex flex-1 flex-col h-full resize-x">
