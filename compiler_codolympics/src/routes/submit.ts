@@ -8,6 +8,7 @@ import { execute } from "../utils/execute";
 import { readOutputFile } from "../utils/read-output-file";
 import { authorize } from "../middleware/authorize";
 import Submission, { SubmissionType } from "../models/submissions";
+import Problem from "../models/problems";
 
 const router = Router();
 
@@ -63,18 +64,43 @@ const runTestcases = async (testcases: TestcaseType[], language: string, code: s
 const saveSubmission = async (submission: SubmissionType) => {
     try {
         const newSubmission = await Submission.findOneAndUpdate({
-            "$and": [
+            $and: [
                 { problemId: submission.problemId },
                 { userId: submission.userId }
             ]
         },
-            submission,
+            {
+                $max: { 
+                    points: submission.points,
+                    passed: submission.passed,
+                    tests: submission.tests
+                 },
+                $setOnInsert: { 
+                    problemId: submission.problemId,
+                    userId: submission.userId,
+                    // points: submission.points,
+                    // passed: submission.passed,
+                    // tests: submission.tests,
+                    verdict: submission.verdict
+                }
+                // $max already inserts the fields if they are missing - no need to have them on $setonInsert
+            },
             { upsert: true, new: true }
         ).lean();
         return { submission: newSubmission, error: null };
     }
     catch (error: any) {
         return { submission: null, error };
+    }
+}
+
+const getProblem = async (problemId: string) => {
+    try {
+        const problem = await Problem.findById(problemId).lean();
+        return { problem, error: null };
+    }
+    catch (error: any) {
+        return { problem: null, error };
     }
 }
 
@@ -97,21 +123,37 @@ router.post('/:problemId', authorize, async (req: Request, res: Response, next: 
     if (TestcasesRunningError)
         return next(TestcasesRunningError);
 
+    const { problem, error: ProblemError } = await getProblem(problemId);
+    if (ProblemError)
+        return next(ProblemError);
+    if (!problem?.points)
+        return res.status(500).json({ message: "Internal Server Error" });
+
     const { submission, error: SavingSubmissionError } = await saveSubmission({
         problemId,
         userId,
-        points: tests,
+        points: +(problem?.points) * (passed / tests) * 1.0,
         tests,
         passed,
         verdict: success ? "Passed" : "Failed"
     });
-    
+
     // TODO: Save points based on problem statement
 
     if (SavingSubmissionError)
         return next(SavingSubmissionError);
 
-    res.status(200).json({ message: 'Execution completed', submission });
+    const currentSubmission = {
+        _id: submission?._id.toString(),
+        passed,
+        tests,
+        verdict: success ? "Passed" : "Failed",
+        points: +(problem?.points) * (passed / tests) * 1.0,
+        userId: submission?.userId,
+        problemId: submission?.problemId
+    };
+
+    res.status(200).json({ message: 'Execution completed', submission: currentSubmission });
 });
 
 export default router;
