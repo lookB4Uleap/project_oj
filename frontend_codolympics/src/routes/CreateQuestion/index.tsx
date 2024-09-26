@@ -1,10 +1,15 @@
-import { ChangeEvent, FormEvent, Reducer, useContext, useReducer } from "react";
+import { ChangeEvent, FormEvent, Reducer, useCallback, useContext, useReducer } from "react";
 import Navbar from "../../components/Navbar";
 import { CreateTestcases } from "./components/CreateTestcases";
 import { Description } from "./components/Description";
 import { Input } from "./components/Input";
 import { ProgressBar } from "./components/ProgressBar";
-import { Actions, ActionType, ProblemType, TestcaseUploadUrlsType } from "./types";
+import {
+    Actions,
+    ActionType,
+    ProblemType,
+    TestcaseUploadUrlsType,
+} from "./types";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getUploadUrls } from "./utils/get-upload-urls";
 import { uploadFiles } from "./utils/upload";
@@ -64,6 +69,20 @@ const reducer = (state: ProblemType, action: ActionType): ProblemType => {
         return state;
     }
 
+    if (action.type === Actions.ADD_TESTCASE && action?.testcase) {
+        console.log('[Create-Problem] Add Testcase');
+        // state.testcases.push({
+        //     inputFile: null,
+        //     outputFile: null,
+        // });
+        // return state;
+
+        const index = action.testcase.index;
+        const testcase = action.testcase.testcase;
+        state.testcases[index] = testcase;
+        return state;
+    }
+
     return state;
 };
 
@@ -77,7 +96,7 @@ const defaultProblem: ProblemType = {
         {
             inputFile: null,
             outputFile: null,
-            type: "sample"
+            type: "sample",
         },
     ],
 };
@@ -87,7 +106,7 @@ export const CreateQuestion = () => {
         Reducer<ProblemType, ActionType>,
         ProblemType
     >(reducer, defaultProblem, () => defaultProblem);
-    const {authToken} = useContext(AuthContext);
+    const { authToken } = useContext(AuthContext);
 
     // useEffect(() => {
     //     console.log("[Problem] ", state);
@@ -124,24 +143,38 @@ export const CreateQuestion = () => {
         });
     };
 
+    const handleAddTestcase = useCallback(() => {
+        console.log('[Create-Problem] Add Testcase');
+        dispatch({ type: Actions.ADD_TESTCASE, testcase: {
+            testcase: {
+                inputFile: null,
+                outputFile: null, 
+            },
+            index: state.testcases.length
+        } });
+    }, [state]);
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        if(!authToken)
-            return;
+        if (!authToken) return;
 
         e.preventDefault();
         console.log(state);
-        const testcaseUploadUrls: TestcaseUploadUrlsType[] = await getUploadUrls(state.testcases, authToken);
+        const testcaseUploadUrls: TestcaseUploadUrlsType[] =
+            await getUploadUrls(state.testcases, authToken);
         await uploadFiles(state.testcases, testcaseUploadUrls);
         const problem = await createProblem(state, authToken);
         createTestcases(testcaseUploadUrls, problem._id, authToken);
-    }
+    };
 
     return (
         <div className="flex flex-1 flex-col h-full items-center justify-center">
             <ProgressBar />
             <Navbar />
 
-            <form className="flex flex-1 flex-col items-start justify-center w-2/3 lg:w-1/2 space-y-12" onSubmit={handleSubmit}>
+            <form
+                className="flex flex-1 flex-col items-start justify-center w-2/3 lg:w-1/2 space-y-12"
+                onSubmit={handleSubmit}
+            >
                 <h1 className="text-4xl pt-10">Create a Question</h1>
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 pt-5 pb-10 w-full">
                     <Input
@@ -186,8 +219,17 @@ export const CreateQuestion = () => {
                         onChange={handleInputChange}
                     />
                 </div>
-                <CreateTestcases testcases={state.testcases} onChange={handleFileSelection} />
-                <button className="self-center w-full bg-sky-900 mb-10" type="submit">SUBMIT</button>
+                <CreateTestcases
+                    testcases={state.testcases}
+                    onChange={handleFileSelection}
+                    onAddTestcase={handleAddTestcase}
+                />
+                <button
+                    className="self-center w-full bg-sky-900 mb-10"
+                    type="submit"
+                >
+                    SUBMIT
+                </button>
             </form>
         </div>
     );
