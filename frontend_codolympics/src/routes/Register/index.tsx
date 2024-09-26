@@ -6,7 +6,7 @@ const Register = () => {
             className="flex flex-1 flex-col 
 					items-center justify-center 
 					h-full
-					bg-[url('../../../public/backgrounds/endless-constellation.svg')]"
+					bg-[url('/backgrounds/endless-constellation.svg')]"
         >
             <RegisterForm />
         </div>
