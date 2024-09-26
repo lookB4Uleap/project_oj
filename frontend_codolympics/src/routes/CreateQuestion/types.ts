@@ -8,7 +8,7 @@ export type TestcaseUploadUrlsType = {
     inputUploadUrl: string;
     outputUploadUrl: string;
     type?: "sample" | "hidden" | "visible";
-}
+};
 
 export type ProblemType = {
     problemTitle: string;
@@ -26,7 +26,8 @@ export enum Actions {
     CHANGE_OUTPUT_DESCRIPTION = "CHANGE_OUTPUT_DESCRIPTION",
     CHANGE_POINTS = "CHANGE_POINTS",
     CHANGE_PROBLEM = "CHANGE_PROBLEM",
-    CHANGE_TESTCASES = "CHANGE_TESTCASES"
+    CHANGE_TESTCASES = "CHANGE_TESTCASES",
+    ADD_TESTCASE = "ADD_TESTCASE",
 }
 
 export type ActionType = {
@@ -36,9 +37,9 @@ export type ActionType = {
     inputDescription?: string;
     outputDescription?: string;
     points?: number;
-    problem?: ProblemType,
+    problem?: ProblemType;
     testcase?: {
-        testcase: TestcaseType,
-        index: number
+        testcase: TestcaseType;
+        index: number;
     };
 };
