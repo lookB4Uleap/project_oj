@@ -5,6 +5,7 @@ type InputType = {
     type: "text" | "number";
     name: string;
     value: string|number;
+    placeholder?: string;
     min?: number;
     max?: number;
     onChange?: (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>, prop: string) => void;
@@ -26,7 +27,7 @@ export const Input = (props: InputType) => {
                         // id="problem-title"
                         // name="problem-title"
                         type={props.type}
-                        placeholder="Problem Title"
+                        placeholder={props?.placeholder}
                         value={props.value}
                         min={props.min}
                         max={props.max}

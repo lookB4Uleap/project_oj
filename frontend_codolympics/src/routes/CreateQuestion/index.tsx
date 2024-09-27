@@ -191,6 +191,7 @@ export const CreateQuestion = () => {
                         type="text"
                         value={state.problemTitle}
                         name="problemTitle"
+                        placeholder="Problem Title"
                         onChange={handleInputChange}
                     />
 
@@ -230,6 +231,7 @@ export const CreateQuestion = () => {
                         name="points"
                         title="Points"
                         type="number"
+                        placeholder="Points"
                         value={state.points}
                         min={1}
                         max={50}

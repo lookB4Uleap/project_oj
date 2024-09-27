@@ -4,7 +4,7 @@ import { TestcaseType, TestcaseUploadUrlsType,  } from "../types";
 
 const requestUploadUrl = (authToken: string) => {
     console.log(authToken);
-    const request = api.get('/api/v1/testcases/upload', {
+    const request = api.get('/api/v1/testcases/upload/file', {
         headers: {
             Authorization: `Bearer ${authToken}`
         }

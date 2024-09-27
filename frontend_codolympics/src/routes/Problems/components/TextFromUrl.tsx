@@ -8,10 +8,16 @@ export const TextFromUrl = ({url}: {url: string}) => {
     useEffect(() => {
         (
             async () => {
+                try {
                 setLoading(true);
                 const {data} = await axios.get(url);
+                console.log(data);
                 setText(data);
                 setLoading(false);
+                }
+                catch(error) {
+                    console.log(error);
+                }
             }
         )();
     }, [])
@@ -20,8 +26,8 @@ export const TextFromUrl = ({url}: {url: string}) => {
         return <></>;
 
     return (
-        <code>
+        <textarea className="bg-inherit" disabled>
             {text}
-        </code>
+        </textarea>
     );
 }

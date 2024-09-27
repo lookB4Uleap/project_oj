@@ -35,7 +35,7 @@ router.post('/', authorize, verifyAdmin, async (req: Request, res: Response, nex
     const outputDescription = req.body.outputDescription;
     const points = req.body.points;
     const code = req.body?.code;
-    const lang = req.body?.language;
+    const lang = req.body?.lang;
     const tags = req.body?.tags;
 
     if (!problemTitle || !problemDescription || !inputDescription || !outputDescription || !points || !code || !lang || !tags)

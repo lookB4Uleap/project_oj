@@ -141,17 +141,18 @@ router.get("/:problemId/problems", authorize, async (req: Request, res: Response
 
 });
 
-router.get('/upload', authorize, verifyAdmin, async (req: Request, res: Response, next: NextFunction) => {
+router.get('/upload/file', authorize, verifyAdmin, async (req: Request, res: Response, next: NextFunction) => {
     const fileId = uuid();
     const fileName = `${fileId}.txt`;
     const bucketName = process.env.AWS_S3_BUCKET;
+    console.log(fileName, bucketName);
     if (!bucketName) {
         console.log('[backend-codolympics] Bucket name is empty', bucketName);
         return res.status(500).json({ message: "Internal server error!" });
     }
 
     const { url, error } = await generatePresignedURL(bucketName, fileName);
-
+    console.log(url, error);
     if (error)
         return next(error);
 

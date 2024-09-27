@@ -118,7 +118,7 @@ export const Problems = () => {
                 <div className="flex flex-1 flex-col lg:flex-row">
                     <div className="flex flex-1 flex-col h-full resize-x">
                         <Problem problem={problem} />
-                        <Tests problemId={problem?._id} />
+                        <Tests />
                     </div>
                     <div className="flex flex-1 h-full">
                         <EditorContainer

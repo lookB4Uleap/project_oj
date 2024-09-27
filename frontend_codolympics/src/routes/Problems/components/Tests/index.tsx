@@ -1,23 +1,21 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { TestCases } from "./TestCases";
-import { CodeContext } from "../../../../contexts/CodeContext";
-import { compilerAPI } from "../../../../api";
 
-export const Tests = ({problemId}: {problemId?: string}) => {
+export const Tests = () => {
     const [open, setOpen] = useState(false);
-    const { compiler, handleCompilerChange } = useContext(CodeContext);
+    // const { compiler, handleCompilerChange } = useContext(CodeContext);
 
-    const handleRunInput = async () => {
-        if(!compiler.input || compiler.input === "" || !problemId)
-            return;
+    // const handleRunInput = async () => {
+    //     if(!compiler.input || compiler.input === "" || !problemId)
+    //         return;
 
-        const {data} = await compilerAPI.post(`/api/v1/run/${problemId}`, { input: compiler.input });
+    //     const {data} = await compilerAPI.post(`/api/v1/run/${problemId}`, { input: compiler.input });
 
-        handleCompilerChange({
-            ...compiler,
-            output: data.result
-        });
-    };
+    //     handleCompilerChange({
+    //         ...compiler,
+    //         output: data.result
+    //     });
+    // };
 
     return (
         // TODO: May need to make text box area sticky, i.e position absolute
@@ -48,8 +46,8 @@ export const Tests = ({problemId}: {problemId?: string}) => {
                 onClick={() => setOpen(!open)}
             >
                 Run Test Case
-            </h2>
-            {open && (
+            </h2>   
+            {/* {open && (
                 <button
                     type="button"
                     className="bg-inherit border-2 border-gray-200 p-2 text-sm"
@@ -57,7 +55,7 @@ export const Tests = ({problemId}: {problemId?: string}) => {
                 >
                     Check Output
                 </button>
-            )}
+            )} */}
             {open && <TestCases />}
         </div>
     );
