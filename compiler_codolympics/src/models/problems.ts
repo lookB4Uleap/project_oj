@@ -13,6 +13,9 @@ export type ProblemType = {
     outputDescription: string;
     sampleTestCases?: TestCaseInputOutputType[];
     points: number;
+    tags?: string;
+    code?: string;
+    lang?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -34,10 +37,9 @@ const problemSchema = new Schema<ProblemType>({
         type: String,
         required: true
     },
-    sampleTestCases: [{
-        input: String,
-        output: String
-    }],
+    tags: String,
+    code: String,
+    lang: String,
     points: {
         type: Number,
         required: true
@@ -46,6 +48,8 @@ const problemSchema = new Schema<ProblemType>({
     timestamps: true,
     collection: 'problems'
 });
+
+problemSchema.index({problemTitle: 'text', problemDescription: 'text', tags: 'text'});
 
 const Problem = model('Problem', problemSchema);
 

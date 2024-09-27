@@ -46,8 +46,13 @@ export const Problems = () => {
         (async () => {
             if (!problemId) return;
             const problem = await getProblem(problemId);
-            setProblem(() => ({ ...problem }));
+            setProblem(prev => ({ ...prev, ...problem }));
         })();
+
+        // ( async () => {
+        //     if (!problemId)
+        // }
+        // )();
     }, []);
 
     const handleModalClose = () =>
@@ -113,7 +118,7 @@ export const Problems = () => {
                 <div className="flex flex-1 flex-col lg:flex-row">
                     <div className="flex flex-1 flex-col h-full resize-x">
                         <Problem problem={problem} />
-                        <Tests />
+                        <Tests problemId={problem?._id} />
                     </div>
                     <div className="flex flex-1 h-full">
                         <EditorContainer

@@ -9,3 +9,10 @@ content-type: application/json
 ###
 POST http://localhost:8005/api/v1/submit/66ca439ffa39af2a028eb050 HTTP/1.1
 Content-Type: application/json
+###
+POST http://localhost:8005/api/v1/run/66f51fd3fd43db9bd8c10766 HTTP/1.1
+content-type: application/json
+
+{
+    "input": "Hello"
+}
