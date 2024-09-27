@@ -66,19 +66,19 @@ export const Search = (props: SearchType) => {
         setUrlParameters({ sort: props.sort * -1 });
     };
 
-    const handleChangeMaxPoints = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.value || e.target.value === "")
-            return
-        props.onChangeMaxPoints(Number(e.target.value));
-        setUrlParameters({max: Number(e.target.value)})
-    }
+    // const handleChangeMaxPoints = (e: ChangeEvent<HTMLInputElement>) => {
+    //     if (!e.target.value || e.target.value === "")
+    //         return
+    //     props.onChangeMaxPoints(Number(e.target.value));
+    //     setUrlParameters({max: Number(e.target.value)})
+    // }
 
-    const handleChangeMinPoints = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.value || e.target.value === "")
-            return
-        props.onChangeMinPoints(Number(e.target.value));
-        setUrlParameters({min: Number(e.target.value)})
-    }
+    // const handleChangeMinPoints = (e: ChangeEvent<HTMLInputElement>) => {
+    //     if (!e.target.value || e.target.value === "")
+    //         return
+    //     props.onChangeMinPoints(Number(e.target.value));
+    //     setUrlParameters({min: Number(e.target.value)})
+    // }
 
     return (
         <form

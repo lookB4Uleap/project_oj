@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Problem, ProblemType } from "./components/Problem";
 import { api } from "../../../../api";
-import { useLocation } from "react-router-dom";
 import { Search } from "../Search";
-import { useQuery } from "../../hooks/useQuery";
 import { getUrlParameters } from "../../utils/getUrlParameters";
 
 // const problems: ProblemType[] = [
