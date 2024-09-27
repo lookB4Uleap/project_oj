@@ -1,4 +1,5 @@
 export type TestCaseInputOutputType = {
+    _id: string;
     input: string;
     output: string;
 }
@@ -9,7 +10,11 @@ export type ProblemType = {
     problemDescription: string;
     inputDescription: string;
     outputDescription: string;
-    sampleTestCases?: TestCaseInputOutputType[];
+    sampleTestcases: TestCaseInputOutputType[];
+    visibleTestcases?: {
+        _id: string;
+        input: string;
+    }[];
     points: number;
 }
 

@@ -1,5 +1,11 @@
 import { model, Schema } from "mongoose";
 
+export enum TestcaseTypes {
+    sample = "sample",
+    visible = "visible",
+    hidden = "hidden"
+}
+
 export type TestcaseType = {
     _id?: string;
     problemId: string;

@@ -13,10 +13,13 @@ export type TestcaseUploadUrlsType = {
 export type ProblemType = {
     problemTitle: string;
     problemDescription: string;
+    tags: string;
     inputDescription: string;
     outputDescription: string;
     points: number;
     testcases: TestcaseType[];
+    lang?: string;
+    code?: string;
 };
 
 export enum Actions {

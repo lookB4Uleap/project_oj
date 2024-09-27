@@ -46,8 +46,13 @@ export const Problems = () => {
         (async () => {
             if (!problemId) return;
             const problem = await getProblem(problemId);
-            setProblem(() => ({ ...problem }));
+            setProblem(prev => ({ ...prev, ...problem }));
         })();
+
+        // ( async () => {
+        //     if (!problemId)
+        // }
+        // )();
     }, []);
 
     const handleModalClose = () =>
