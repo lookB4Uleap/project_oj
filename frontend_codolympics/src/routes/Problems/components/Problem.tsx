@@ -52,7 +52,7 @@ export const Problem = ({ problem }: { problem?: ProblemType | null }) => {
                 <div>{problem?.outputDescription}</div>
             </div>
 
-            {problem?.sampleTestcases.map((sampleTestcase, index) => (
+            {problem?.sampleTestcases?.map((sampleTestcase, index) => (
                 <div className="w-full" key={sampleTestcase._id}>
                     <div className="mb-6 w-full">
                         <h2 className="text-2xl font-semibold mb-3">

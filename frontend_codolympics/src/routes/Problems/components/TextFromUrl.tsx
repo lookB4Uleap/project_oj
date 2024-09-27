@@ -26,8 +26,7 @@ export const TextFromUrl = ({url}: {url: string}) => {
         return <></>;
 
     return (
-        <textarea className="bg-inherit" disabled>
-            {text}
+        <textarea className="bg-inherit" disabled value={text}>
         </textarea>
     );
 }
