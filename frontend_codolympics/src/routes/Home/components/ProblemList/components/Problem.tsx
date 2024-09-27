@@ -23,7 +23,8 @@ export const Problem = ({ problem, index }: { problem: ProblemType, index: numbe
         >
             <div className="
                     flex flex-row
-                    text-xl
+                    text-base lg:text-xl
+                    mr-4
                 "
             >
                 {problem.problemTitle}

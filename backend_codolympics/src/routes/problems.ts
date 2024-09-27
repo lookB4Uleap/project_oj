@@ -58,9 +58,25 @@ router.post('/', authorize, verifyAdmin, async (req: Request, res: Response, nex
     res.status(201).json({ message: 'Problem created successfully.', problem });
 });
 
-const getProblems = async () => {
+const getProblems = async (search?: string|null) => {
     try {
-        const problems = await Problem.find().lean();
+        let problems;
+        if (!search || search === "")
+            problems = await Problem.find({}, {code: 0, lang: 0}).lean();
+        else
+            problems = await Problem.find({
+                $text: {$search: search}    
+            }, {
+                _id: 1,
+                problemTitle: 1,
+                problemDescription: 1,
+                inputDescription: 1,
+                outputDescription: 1,
+                points: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                score: { $meta: "textScore" }
+            }).sort({ score: { $meta: "textScore" } }).lean();
         return { problems, error: null };
     } catch (error: any) {
         return { problems: null, error };
@@ -68,7 +84,8 @@ const getProblems = async () => {
 }
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    const { problems, error } = await getProblems();
+    const search = req.query.search as string|null|undefined;
+    const { problems, error } = await getProblems(search);
 
     if (error)
         return next(error);

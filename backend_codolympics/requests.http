@@ -53,3 +53,5 @@ Authorization:
 }
 ###
 GET http://localhost:8000/api/v1/submissions HTTP/1.1
+###
+GET http://localhost:8000/api/v1/problems?search=area HTTP/1.1

@@ -1,6 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Problem, ProblemType } from "./components/Problem";
 import { api } from "../../../../api";
+import { useLocation } from "react-router-dom";
+import { Search } from "../Search";
+import { useQuery } from "../../hooks/useQuery";
+import { getUrlParameters } from "../../utils/getUrlParameters";
 
 // const problems: ProblemType[] = [
 //     {
@@ -41,43 +45,85 @@ import { api } from "../../../../api";
 // ];
 
 export const ProblemList = () => {
+    // const query = useQuery();
     const [problems, setProblems] = useState<any>([]);
+    const [search, setSearch] = useState<string>("");
+    const [sort, setSort] = useState(1);
+    const [minPoints, setMinPoints] = useState<number | null>(null);
+    const [maxPoints, setMaxPoints] = useState<number | null>(null);
 
-    const getProblemsList = useCallback(async () => {
+    const getProblemsList = useCallback(async (search?: string | null) => {
         try {
-            const {data} = await api.get('api/v1/problems');
+            const { data } = await api.get("api/v1/problems", {
+                params: {
+                    search,
+                },
+            });
             setProblems(() => [...data.problems]);
-        }
-        catch(error: any) {
-            console.log('[Home-Problems] Error');
+        } catch (error: any) {
+            console.log("[Home-Problems] Error");
             console.error(error);
         }
     }, []);
 
     useEffect(() => {
-        getProblemsList();
+        const sort = getUrlParameters("sort");
+        if (sort && (Number(sort) === -1 || Number(sort) === 1))
+            setSort(Number(sort));
+
+        const search = getUrlParameters("search");
+        if (search) setSearch(search);
+        getProblemsList(search);
+
+        const min = getUrlParameters("min");
+        if (min && Number(min) >= 0) 
+            setMinPoints(Number(min));
+
+        const max = getUrlParameters("max");
+        if (max && Number(max) >= 0) 
+            setMaxPoints(Number(max));
+
+
         () => setProblems([]);
-    }, [])
+    }, []);
 
     return (
-        <div className="
+        <div
+            className="
                 flex flex-1 flex-col
                 items-center justify-start
-                py-5 px-14
+                py-5 px-4 lg:px-14
             "
         >
-            <h1 className="
+            <h1
+                className="
                     self-start
-                    p-5 mb-14
+                    p-2 lg:p-5 mb-3 lg:mb-6
+                    text-3xl lg:text-5xl
                 "
             >
                 Problem List
             </h1>
-            {
-                problems.map((problem: ProblemType, index: number) => 
-                    <Problem key={problem._id} problem={problem} index={index} />
-                )
-            }
+            <Search
+                search={search}
+                sort={sort}
+                min={minPoints}
+                max={maxPoints}
+                onChangeSearch={(search) => setSearch(search)}
+                onChangeSort={(sort) => setSort(sort)}
+                onChangeMinPoints={(points) => setMinPoints(points)}
+                onChangeMaxPoints={(points) => setMaxPoints(points)}
+                onSearch={(problems) => setProblems([...problems])}
+            />
+            {problems
+                .sort((problem1: ProblemType, problem2: ProblemType) => (problem1.points - problem2.points) * sort)
+                .map((problem: ProblemType, index: number) => (
+                    <Problem
+                        key={problem._id}
+                        problem={problem}
+                        index={index}
+                    />
+                ))}
         </div>
     );
-}
+};

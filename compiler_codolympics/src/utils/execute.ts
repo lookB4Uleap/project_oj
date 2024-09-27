@@ -67,7 +67,7 @@ const getCommand = (language: string, filePath: string) => {
 export const executeCode = (language: string, filePath: string, inputFilePath?: string) : Promise<OutputType> => {
     const command = getCommand(language, filePath);
     const outputFilePath = getOutputPath(filePath);
-    let run = `${command}`;
+    let run = `${command} >> ${outputFilePath}`;
 
     if (inputFilePath)
         run = `${command} < ${inputFilePath} >> ${outputFilePath}`
