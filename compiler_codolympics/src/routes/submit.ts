@@ -75,17 +75,20 @@ const saveSubmission = async (submission: SubmissionType) => {
                     passed: submission.passed,
                     tests: submission.tests
                  },
-                $setOnInsert: { 
+                $set: { 
                     problemId: submission.problemId,
                     userId: submission.userId,
                     // points: submission.points,
                     // passed: submission.passed,
                     // tests: submission.tests,
-                    verdict: submission.verdict
+                    verdict: submission.verdict,
+                    code: submission?.code,
+                    lang: submission?.lang
                 }
                 // $max already inserts the fields if they are missing - no need to have them on $setonInsert
+                // $setonInsert works only on inserting - use $set to override data
             },
-            { upsert: true, new: true }
+            { upsert: true, new: false }
         ).lean();
         return { submission: newSubmission, error: null };
     }
@@ -129,28 +132,34 @@ router.post('/:problemId', authorize, async (req: Request, res: Response, next: 
     if (!problem?.points)
         return res.status(500).json({ message: "Internal Server Error" });
 
-    const { submission, error: SavingSubmissionError } = await saveSubmission({
+    const points = +(problem?.points) * (passed / tests) * 1.0;
+
+    const { submission: prevSubmission, error: SavingSubmissionError } = await saveSubmission({
         problemId,
         userId,
-        points: +(problem?.points) * (passed / tests) * 1.0,
+        points,
         tests,
         passed,
-        verdict: success ? "Passed" : "Failed"
+        verdict: success ? "Passed" : "Failed",
+        code,
+        lang: language
     });
 
-    // TODO: Save points based on problem statement
+    const prevPoints = prevSubmission?.points;
+
+    // console.log('[compiler-submit] submission ', prevSubmission);
 
     if (SavingSubmissionError)
         return next(SavingSubmissionError);
 
     const currentSubmission = {
-        _id: submission?._id.toString(),
+        _id: prevSubmission?._id.toString(),
         passed,
         tests,
         verdict: success ? "Passed" : "Failed",
         points: +(problem?.points) * (passed / tests) * 1.0,
-        userId: submission?.userId,
-        problemId: submission?.problemId
+        userId,
+        problemId
     };
 
     res.status(200).json({ message: 'Execution completed', submission: currentSubmission });

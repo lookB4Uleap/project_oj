@@ -51,7 +51,9 @@ export const Submissions = () => {
                                 hover:cursor-pointer 
                                 ${index % 2 === 0 ? "bg-opacity-20 bg-slate-900" : "bg-opacity-25 bg-slate-800"}
                             `}
-                            onClick={() => navigate(`/problems/${submission.problemId}`)}
+                            onClick={() => navigate(`/problems/${submission.problemId}`, {
+                                state: submission
+                            })}
                         >
                             <h2 className="text-xl lg:text-3xl md:text-2xl">{submission.problemTitle}</h2>
                             <div>Testcases {submission.passed}/{submission.tests} passed</div>
