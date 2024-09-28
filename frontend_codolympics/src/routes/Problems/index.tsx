@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { EditorContainer } from "./components/Editor";
 import { useContext, useEffect, useState } from "react";
@@ -33,15 +33,17 @@ export const Problems = () => {
     const { problemId } = useParams();
     const { authToken } = useContext(AuthContext);
     const [problem, setProblem] = useState<ProblemType | null>();
+    const { state } = useLocation();
     const [compiler, setCompiler] = useState<CompilerType>({
-        code: "",
-        language: languages[0].id,
+        code: state?.code ?? "",
+        language: state?.lang ?? languages[0].id,
         input: "",
         output: "",
     });
     const [submission, setSubmission] = useState<SubmissionType | null>(null);
 
     useEffect(() => {
+        console.log('[Problems] Submission ', state);
         // console.log('[Problems] Problem Id ', problemId);
         (async () => {
             if (!problemId) return;
@@ -126,7 +128,7 @@ export const Problems = () => {
                             // defaultValue="// c++ editor"
                             language={languageMap[compiler.language].editor}
                             defaultValue={
-                                languageMap[compiler.language].snippet
+                                state?.code ?? languageMap[compiler.language].snippet
                             }
                             submit
                             onSubmit={handleSubmit}

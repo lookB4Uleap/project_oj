@@ -7,6 +7,8 @@ export type SubmissionType = {
     verdict: "Passed" | "Failed";
     tests: number;
     passed: number;
+    code?: string;
+    lang?: string;
 }
 
 const submissionSchema = new Schema<SubmissionType>({
@@ -21,7 +23,9 @@ const submissionSchema = new Schema<SubmissionType>({
     points: Number,
     tests: Number,
     passed: Number,
-    verdict: String
+    verdict: String,
+    code: String,
+    lang: String
 }, {
     timestamps: true,
     collection: 'submissions'
