@@ -81,9 +81,12 @@ export const ProblemList = () => {
         if (max && Number(max) >= 0) 
             setMaxPoints(Number(max));
 
-
         () => setProblems([]);
     }, []);
+
+    // useEffect(() => {
+    //     console.log('[ProblemList] ', {maxPoints, minPoints});
+    // }, [maxPoints, minPoints]);
 
     return (
         <div
@@ -115,6 +118,8 @@ export const ProblemList = () => {
             />
             {problems
                 .sort((problem1: ProblemType, problem2: ProblemType) => (problem1.points - problem2.points) * sort)
+                .filter((problem: ProblemType) => !minPoints ? true : (problem.points >= minPoints))
+                .filter((problem: ProblemType) => !maxPoints ? true : (problem.points <= maxPoints))
                 .map((problem: ProblemType, index: number) => (
                     <Problem
                         key={problem._id}
