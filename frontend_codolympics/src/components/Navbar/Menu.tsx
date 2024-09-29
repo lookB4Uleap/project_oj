@@ -1,5 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 type propsType = {
     onLogout: () => void
@@ -7,8 +9,10 @@ type propsType = {
 
 export const MenuOptions = (props: propsType) => {
     const navigate = useNavigate();
+    const  {user} = useContext(AuthContext);
 
     const menuItems = [
+        { name: `Hi ${user?.username}`, action: null },
         { name: "Profile", action: null },
         { name: "Submissions", action: () => navigate(`/submissions`) },
         { name: "Logout", action: props.onLogout },

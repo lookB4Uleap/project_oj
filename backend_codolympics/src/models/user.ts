@@ -27,7 +27,10 @@ const userSchema = new Schema<UserType>({
     password: String,
     problemsSolved: Number,
     badges: [String],
-    points: Number,
+    points: {
+        type: Number,
+        default: 0
+    },
     roles: {
         type: Map,
         of: mongoose.Schema.Types.Mixed
