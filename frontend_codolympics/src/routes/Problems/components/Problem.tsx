@@ -20,7 +20,7 @@ export const Problem = ({ problem }: { problem?: ProblemType | null }) => {
         const {data} = await compilerAPI.post(`/api/v1/run/${problem?._id}`, { input });
 
         if (output.replace(/(\r\n|\n|\r)/gm, "") === data.result.replace(/(\r\n|\n|\r)/gm, ""))
-            alert('Correct output prdicted');
+            alert('Correct output predicted');
         else
             alert('Output predicted is not correct');
 
