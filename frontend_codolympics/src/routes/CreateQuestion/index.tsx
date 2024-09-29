@@ -16,6 +16,7 @@ import { uploadFiles } from "./utils/upload";
 import { createProblem } from "./utils/create-problem";
 import { createTestcases } from "./utils/create-testcases";
 import { Select } from "./components/Select";
+import { useNavigate } from "react-router-dom";
 
 const reducer = (state: ProblemType, action: ActionType): ProblemType => {
     // if (action.type === Actions.CHANGE_PROBLEM_TITLE && action.problemTitle)
@@ -111,6 +112,7 @@ export const CreateQuestion = () => {
         ProblemType
     >(reducer, defaultProblem, () => defaultProblem);
     const { authToken } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     // useEffect(() => {
     //     console.log("[Problem] ", state);
@@ -173,6 +175,8 @@ export const CreateQuestion = () => {
         await uploadFiles(state.testcases, testcaseUploadUrls);
         const problem = await createProblem(state, authToken);
         createTestcases(testcaseUploadUrls, problem._id, authToken);
+        alert("Successfully created the problem.");
+        navigate("/");
     };
 
     return (
