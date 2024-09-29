@@ -9,7 +9,7 @@ const router = Router();
 const SALT = 10;
 
 enum Environment {
-    production= "production",
+    production = "production",
     development = "development"
 }
 
@@ -24,7 +24,7 @@ const getUser = async (username: string) => {
     try {
         const user = await User.findOne({ username }).lean();
         return { user, error: null };
-    } 
+    }
     catch (error: any) {
         return { user: null, error }
     }
@@ -34,7 +34,7 @@ const validatePassword = async (password: string, hash: string) => {
     try {
         const valid = await bcrypt.compare(password, hash);
         return { valid, error: null };
-    } 
+    }
     catch (error: any) {
         const invalidLoginError = new Error("Invalid Login Credentials");
         return { valid: null, error: invalidLoginError };
@@ -75,18 +75,18 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     const tokens = authorizeUser(user?._id.toString(), user.username, user.email, user?.roles);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
-    res.cookie('refreshToken', tokens.refreshToken, 
-    // {
-    //     httpOnly: true,
-    //     secure: false, // Use in production with HTTPS
-    //     sameSite: 'strict', // Adjust as needed
-    //     maxAge: 1000 * 60 * 60 * 24 * 30,
-    //     path: '/',
-    //     domain: undefined
-    // }
+    res.cookie('refreshToken', tokens.refreshToken,
+        // {
+        //     httpOnly: true,
+        //     secure: false, // Use in production with HTTPS
+        //     sameSite: 'strict', // Adjust as needed
+        //     maxAge: 1000 * 60 * 60 * 24 * 30,
+        //     path: '/',
+        //     domain: undefined
+        // }
         cookieOptions
-    ).status(200).json({ 
-        message: 'User logged in.', 
+    ).status(200).json({
+        message: 'User logged in.',
         tokens: {
             authToken: tokens.authToken
         },
@@ -135,8 +135,8 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
     const tokens = authorizeUser(newUser?._id.toString(), newUser.username, newUser.email, newUser?.roles);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
-    res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(201).json({ 
-        message: 'User created.', 
+    res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(201).json({
+        message: 'User created.',
         tokens: {
             authToken: tokens.authToken
         },
@@ -150,32 +150,32 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
 });
 
 router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
-    const {cookie} = req.headers;
+    const { cookie } = req.headers;
     console.log('[User] Cookie ', cookie);
 
     if (!cookie) {
-        res.status(401).json({message: 'Unauthorized!'});
+        res.status(401).json({ message: 'Unauthorized!' });
         return;
     }
 
     const refreshToken = cookie.split("refreshToken=")[1].split(";")[0];
 
-    const {user, error} = verifyRefreshToken(refreshToken);
+    const { user, error } = verifyRefreshToken(refreshToken);
     if (error) {
         next(error);
         return;
     }
 
     if (!user) {
-        res.status(401).json({message: 'Unauthorized!'});
+        res.status(401).json({ message: 'Unauthorized!' });
         return;
     }
 
     const tokens = authorizeUser(user.userId, user.username, user.email, user?.roles);
     res.header("Access-Control-Allow-Origin: *");
     res.header("Access-Control-Allow-Credentials: true");
-    res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(200).json({ 
-        message: 'User authenticated.', 
+    res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(200).json({
+        message: 'User authenticated.',
         tokens: {
             authToken: tokens.authToken
         },
@@ -189,7 +189,24 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post('/logout', async (req: Request, res: Response) => {
-    res.clearCookie('refreshToken').status(200).json({message: 'Successfully logged out!'});
+    res.clearCookie('refreshToken').status(200).json({ message: 'Successfully logged out!' });
+});
+
+const getUsers = async () => {
+    try {
+        const users = await User.find({}, { username: 1, email: 1, points: 1 }).sort({ points: -1 }).limit(10).lean();
+        return {users, error: null};
+    }
+    catch(error: any) {
+        return {users: null, error};
+    }
+}
+
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    const {users, error} = await getUsers();
+    if (error)
+        return next(error);
+    res.status(200).json(users);
 });
 
 export default router;
