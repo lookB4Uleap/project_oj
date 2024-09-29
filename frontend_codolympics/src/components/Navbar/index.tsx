@@ -17,6 +17,7 @@ type PathIndexType = {
 const navigationProps = [
     { name: "Home", href: "/", current: false },
     { name: "Playground", href: "/playground", current: false },
+    { name: "Leaderboard", href: "/leaderboard", current: false },
     { name: "Create Question", href: "/createQuestion", current: false },
 ];
 

@@ -11,6 +11,7 @@ import { Problems } from "./routes/Problems";
 import { Playground } from "./routes/Playground";
 import { CreateQuestion } from "./routes/CreateQuestion";
 import { Submissions } from "./routes/Submissions";
+import { Leaderboard } from "./routes/Leaderboard";
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
         path: "/submissions",
         element: <Submissions />,
     },
+    {
+        path: "/leaderboard",
+        element: <Leaderboard />
+    }
 ]);
 
 const darkTheme = createTheme({

@@ -9,6 +9,7 @@ import { readOutputFile } from "../utils/read-output-file";
 import { authorize } from "../middleware/authorize";
 import Submission, { SubmissionType } from "../models/submissions";
 import Problem from "../models/problems";
+import User from "../models/users";
 
 const router = Router();
 
@@ -70,12 +71,12 @@ const saveSubmission = async (submission: SubmissionType) => {
             ]
         },
             {
-                $max: { 
+                $max: {
                     points: submission.points,
                     passed: submission.passed,
                     tests: submission.tests
-                 },
-                $set: { 
+                },
+                $set: {
                     problemId: submission.problemId,
                     userId: submission.userId,
                     // points: submission.points,
@@ -104,6 +105,21 @@ const getProblem = async (problemId: string) => {
     }
     catch (error: any) {
         return { problem: null, error };
+    }
+}
+
+const updateUserPoints = async (userId: string, points: number) => {
+    try {
+        await User.findByIdAndUpdate(userId, {
+            $inc: {
+                points
+            }
+        });
+        return {error: null};
+    } 
+    catch (error) {
+        console.log('[submit] User points not updated');
+        return {error};
     }
 }
 
@@ -145,7 +161,9 @@ router.post('/:problemId', authorize, async (req: Request, res: Response, next: 
         lang: language
     });
 
-    const prevPoints = prevSubmission?.points;
+    const prevPoints = prevSubmission?.points ?? 0;
+
+    updateUserPoints(userId, points - prevPoints);
 
     // console.log('[compiler-submit] submission ', prevSubmission);
 
@@ -157,7 +175,7 @@ router.post('/:problemId', authorize, async (req: Request, res: Response, next: 
         passed,
         tests,
         verdict: success ? "Passed" : "Failed",
-        points: +(problem?.points) * (passed / tests) * 1.0,
+        points,
         userId,
         problemId
     };
