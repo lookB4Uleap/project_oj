@@ -168,7 +168,7 @@ const getProblemWithTestcases = async (id: string) => {
                 $project: {
                     tags: 1,
                     problemTitle: 1,
-                    problemDescriptiton: 1,
+                    problemDescription: 1,
                     inputDescription: 1,
                     outputDescription: 1,
                     points: 1,

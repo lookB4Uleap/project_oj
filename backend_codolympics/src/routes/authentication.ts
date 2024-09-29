@@ -73,8 +73,6 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     }
 
     const tokens = authorizeUser(user?._id.toString(), user.username, user.email, user?.roles);
-    res.header("Access-Control-Allow-Origin: *");
-    res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken,
         // {
         //     httpOnly: true,
@@ -95,6 +93,26 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
             username: user.username,
             email: user.email,
             roles: user?.roles
+        }
+    });
+});
+
+router.post("/login/guest", async (req: Request, res: Response, next: NextFunction) => {
+    const id = `guest_${Date.now().toString()}`;
+    const username = 'guest'
+    const email =  'guest@codolympics.tech';
+    const tokens = authorizeUser(id, username, email);
+    res.cookie('refreshToken', tokens.refreshToken,
+        cookieOptions
+    ).status(200).json({
+        message: 'Guest user logged in.',
+        tokens: {
+            authToken: tokens.authToken
+        },
+        user: {
+            userId: id,
+            username,
+            email
         }
     });
 });
@@ -133,8 +151,6 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
     }
 
     const tokens = authorizeUser(newUser?._id.toString(), newUser.username, newUser.email, newUser?.roles);
-    res.header("Access-Control-Allow-Origin: *");
-    res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(201).json({
         message: 'User created.',
         tokens: {
@@ -172,8 +188,8 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
     }
 
     const tokens = authorizeUser(user.userId, user.username, user.email, user?.roles);
-    res.header("Access-Control-Allow-Origin: *");
-    res.header("Access-Control-Allow-Credentials: true");
+    // res.header("Access-Control-Allow-Origin: *");
+    // res.header("Access-Control-Allow-Credentials: true");
     res.cookie('refreshToken', tokens.refreshToken, cookieOptions).status(200).json({
         message: 'User authenticated.',
         tokens: {
@@ -189,7 +205,7 @@ router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post('/logout', async (req: Request, res: Response) => {
-    res.clearCookie('refreshToken').status(200).json({ message: 'Successfully logged out!' });
+    res.clearCookie('refreshToken', cookieOptions).status(200).json({ message: 'Successfully logged out!' });
 });
 
 const getUsers = async () => {

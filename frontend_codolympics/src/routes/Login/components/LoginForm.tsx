@@ -26,7 +26,7 @@ const LoginForm = () => {
     const [error, setError] = useState<ErrorType>({
         open: false,
         message: "",
-        error: null
+        error: null,
     });
     const { updateAuth } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -53,7 +53,9 @@ const LoginForm = () => {
         setLoading(true);
 
         try {
-            const { data } = await api.post("/api/v1/users/login", formData, {withCredentials: true});
+            const { data } = await api.post("/api/v1/users/login", formData, {
+                withCredentials: true,
+            });
             console.log("[Login] Data ", data);
             updateAuth(data);
             navigate("/");
@@ -69,6 +71,29 @@ const LoginForm = () => {
             }));
         }
     };
+
+    const handleLoginAsGuest = async () => {
+        setLoading(true);
+
+        try {
+            const { data } = await api.post("/api/v1/users/login/guest", {}, {
+                withCredentials: true,
+            });
+            console.log("[Login] Data ", data);
+            updateAuth(data);
+            navigate("/");
+        } catch (err: any) {
+            setLoading(false);
+            // console.error(err);
+            setError((prevError: ErrorType) => ({
+                ...prevError,
+                open: true,
+                error: err,
+                status: err.response.status,
+                message: err.response.data.message,
+            }));
+        }
+    }
 
     return (
         <div className="flex flex-1 flex-col items-center justify-center">
@@ -135,7 +160,26 @@ const LoginForm = () => {
                         />
                     )}
                 </button>
+                <button
+                    className="flex items-center justify-center 
+                        h-11 mt-5 min-w-20
+                        bg-blue-900 border-transparent  border-2 
+                        hover:border-blue-950
+                    "
+                    onClick={handleLoginAsGuest}
+                    type="button"
+                >
+                    {!loading ? (
+                        "Login as Guest"
+                    ) : (
+                        <CircularProgress
+                            style={{ color: "inherit" }}
+                            size={20}
+                        />
+                    )}
+                </button>
             </form>
+
             <div
                 className="
                     flex flex-row

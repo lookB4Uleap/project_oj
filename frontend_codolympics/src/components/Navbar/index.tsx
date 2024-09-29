@@ -9,6 +9,7 @@ import { LoginButton } from "./LoginButton";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { api } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 type PathIndexType = {
     [key: string]: number;
@@ -31,6 +32,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
+    const navigate = useNavigate();
     const [navigation, setNavigation] = useState(navigationProps);
     const [loading, setLoading] = useState(false);
     const { authToken, user, updateAuth } = useContext(AuthContext);
@@ -56,6 +58,7 @@ export default function Navbar() {
                 withCredentials: true,
             }
         );
+        navigate(0);
         setAuth(null);
         updateAuth(null);
         setLoading(false);
