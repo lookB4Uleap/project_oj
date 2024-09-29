@@ -35,7 +35,7 @@ export const Input = (props: InputType) => {
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-200 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
                 </div>
-                <div className="text-sm">{(typeof props.value === 'string') ? `${props.value.length}/200` : '1-25'}</div>
+                <div className="text-sm">{(props.name !== 'points') ? `${String(props.value).length}/200` : '1-50'}</div>
             </div>
         </div>
     );

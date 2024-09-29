@@ -16,7 +16,7 @@ const saveProblem = async (problemProps: ProblemType) => {
             outputDescription: problemProps.outputDescription,
             points: problemProps.points,
             code: problemProps?.code,
-            language: problemProps?.lang,
+            lang: problemProps?.lang,
             tags: problemProps?.tags
         });
         const newProblem = await problem.save();

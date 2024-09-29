@@ -28,7 +28,7 @@ enum Languages {
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const language = req.body.language;
     const code = req.body.code;
-    const input = req.body.input;
+    const input = String(req.body.input);
     const inputFilePath = generateInputFile(input);
 
     if (!language || !code)
@@ -54,7 +54,8 @@ const getProblemCode = async (problemId: string) => {
 router.post('/:problemId', async (req: Request, res: Response, next: NextFunction) => {
     // TODO Should I add an authorization here?
     const problemId = req.params.problemId;
-    const input = req.body.input;
+    const input = String(req.body.input);
+    console.log('[run] input ', input);
     const {problem, error: ProblemCodeError} = await getProblemCode(problemId);
     if (ProblemCodeError)
         return next(ProblemCodeError);
