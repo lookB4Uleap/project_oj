@@ -27,12 +27,14 @@ export const languages: LanguageType[] = [
     { id: "c", name: "C", snippet: "// c editor", editor: "c" },
     { id: "cpp", name: "C++", snippet: "// c++ editor", editor: "cpp" },
     { id: "py", name: "Python3", snippet: "# python editor", editor: "python" },
+    {id: "java", name: "Java", snippet: "// java editor", editor: "java"}
 ];
 
 export const languageMap: LanguageMapType = {
     'c': languages[0],
     'cpp': languages[1],
-    'py': languages[2]
+    'py': languages[2],
+    'java': languages[3]
 }
 
 export const CodeContext = createContext<CodeContextType>({

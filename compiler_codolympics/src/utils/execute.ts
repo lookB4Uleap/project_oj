@@ -14,7 +14,8 @@ type OutputType = {
 enum Languages {
     c = 'c',
     cpp = 'cpp',
-    py = 'py'
+    py = 'py',
+    java = 'java'
 }
 
 const dirOutput = path.join(__dirname, 'outputs');
@@ -47,6 +48,12 @@ const runPythonCode = (filePath: string) => {
     return command;
 }
 
+const runJavaCode = (filePath: string) => {
+    const jobId = path.basename(filePath).split(".")[0];
+    const command = `java ${filePath}`;
+    return command;
+}
+
 const getOutputPath = (filePath: string) => {
     const jobId = path.basename(filePath).split(".")[0];
     const outputFilename = `${jobId}_output.txt`
@@ -61,6 +68,8 @@ const getCommand = (language: string, filePath: string) => {
         return runCppCode(filePath);
     else if (language === Languages.py)
         return runPythonCode(filePath);
+    else if (language === Languages.java)
+        return runJavaCode(filePath);
     return;
 } 
 
