@@ -13,7 +13,7 @@ export const MenuOptions = (props: propsType) => {
 
     const menuItems = [
         { name: `Hi ${user?.username}`, action: null },
-        { name: "Profile", action: null },
+        { name: "Profile", action: () => navigate(`/profile`) },
         { name: "Submissions", action: () => navigate(`/submissions`) },
         { name: "Logout", action: props.onLogout },
     ];

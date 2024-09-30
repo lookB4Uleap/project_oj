@@ -12,6 +12,7 @@ import { Playground } from "./routes/Playground";
 import { CreateQuestion } from "./routes/CreateQuestion";
 import { Submissions } from "./routes/Submissions";
 import { Leaderboard } from "./routes/Leaderboard";
+import { Profile } from "./routes/Profile";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
     {
         path: "/leaderboard",
         element: <Leaderboard />
+    },
+    {
+        path: "/profile",
+        element: <Profile />
     }
 ]);
 

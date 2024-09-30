@@ -67,6 +67,11 @@ export const Problems = () => {
         );
 
     const handleSubmit = async () => {
+        if (!authToken) {
+            alert("Please login to submit a problem");
+            return;
+        }
+
         const response = await compilerAPI.post(
             `/api/v1/submit/${problemId}`,
             {
