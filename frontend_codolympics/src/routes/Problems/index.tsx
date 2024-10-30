@@ -9,7 +9,7 @@ import {
     languageMap,
     languages,
 } from "../../contexts/CodeContext";
-import { ProblemType, SubmissionType } from "./types";
+import { FlexType, ProblemType, SubmissionType } from "./types";
 import { Problem } from "./components/Problem";
 import { Tests } from "./components/Tests";
 import { compilerAPI } from "../../api";
@@ -40,7 +40,56 @@ export const Problems = () => {
         input: "",
         output: "",
     });
+    const [current, setCurrent] = useState<number | null>(null);
     const [submission, setSubmission] = useState<SubmissionType | null>(null);
+    const [flex, setFlex] = useState<FlexType>({
+        leftFlex: 0.5,
+        rightFlex: 0.5
+    });
+
+    const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+        // e.preventDefault();
+        const current = e.clientX;
+        setCurrent(current);
+        console.log('[Problem] Drag ', {
+            clientx: e.clientX,
+            clienty: e.clientY,
+            movementx: e.movementX,
+            movementy: e.movementY
+        });
+    }
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!current) {
+            setCurrent(e.clientX);
+            return;
+        }
+        
+        const change = (e.clientX - current)/current;
+        const leftFlex = flex.leftFlex - change;
+        const rightFlex = flex.rightFlex + change;
+
+        setCurrent(e.clientX);
+        setFlex(() => ({
+            leftFlex,
+            rightFlex
+        }));
+
+        // console.log('[Problem] Drag ', {
+        //     clientx: e.clientX,
+        //     clienty: e.clientY,
+        //     movementx: e.movementX,
+        //     movementy: e.movementY
+        // });
+
+        console.log({
+            leftFlex,
+            rightFlex,
+            change,
+            prev: current,
+            cur: e.clientX
+        });
+    };
 
     useEffect(() => {
         console.log('[Problems] Submission ', state);
@@ -123,11 +172,12 @@ export const Problems = () => {
                 <SubmissionModal submission={submission} onClose={handleModalClose}  />
                 <Navbar />
                 <div className="flex flex-1 flex-col lg:flex-row">
-                    <div className="flex flex-1 flex-col h-full resize-x">
+                    <div className="flex flex-col h-full resize-x" style={{ flex: flex.leftFlex}}>
                         <Problem problem={problem} />
                         <Tests />
                     </div>
-                    <div className="flex flex-1 h-full">
+                    <div className="w-3 bg-white" onMouseMove={handleMouseMove}></div>
+                    <div className="flex h-full" style={{ flex: flex.rightFlex}}>
                         <EditorContainer
                             // language="cpp"
                             // defaultValue="// c++ editor"

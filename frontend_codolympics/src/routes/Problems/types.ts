@@ -27,3 +27,8 @@ export type SubmissionType = {
     verdict: string;
     open?: boolean;
 }
+
+export type FlexType = {
+    leftFlex: number;
+    rightFlex: number;
+}
